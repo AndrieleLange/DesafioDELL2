@@ -33,6 +33,7 @@ public class ChampionshipController {
 
     public void avancarFase() {
         championship.avancarFase();
+        championshipControl.put(championship.getFase(), championship);
     }
 
     public boolean faseFinalizada() {
@@ -47,7 +48,17 @@ public class ChampionshipController {
         return championship.getCampeao();
     }
 
+    public void toStringControl(){
+        for (Map.Entry<Integer, Championship> entry : championshipControl.entrySet()) {
+            System.out.println("Fase " + entry.getKey() + "\n " + entry.getValue().toString());
+        }
+    }
+
     public void exibirResultadosFinais() {
-        championship.exibirResultadosFinais();
+        toStringControl();
+        // championshipControl.forEach((key, championship) -> {
+        //     System.out.println("Fase " + key+1);
+        //     championshipControl.get(key).exibirResultadosFinais();
+        // });
     }
 }

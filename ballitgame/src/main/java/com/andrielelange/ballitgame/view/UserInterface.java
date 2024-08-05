@@ -45,6 +45,7 @@ public class UserInterface {
                     break;
                 default:
                     System.out.println("Opção inválida!");
+                    iniciar();
             }
         }
     }
@@ -140,6 +141,7 @@ public class UserInterface {
                     break;
                 default:
                     System.out.println("Opção inválida!");
+                    gerenciarPartida();
             }
         }
 
