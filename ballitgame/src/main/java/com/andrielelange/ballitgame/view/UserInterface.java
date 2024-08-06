@@ -1,5 +1,9 @@
 package com.andrielelange.ballitgame.view;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import com.andrielelange.ballitgame.controller.ChampionshipController;
@@ -68,7 +72,18 @@ public class UserInterface {
     }
 
     private void iniciarCampeonato() {
+        System.out.println("voçê deseja começar o campeonato com os times pré-cadastrados? (s/n)");
+        if(scanner.nextLine().equals("s")){
+            try {
+                leitorTXT();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }else{
+            iniciar();
+        }
         try {
+        
             controller.iniciarCampeonato();
             System.out.println("Campeonato iniciado com sucesso!");
             gerenciarPartida();
@@ -78,6 +93,10 @@ public class UserInterface {
     }
 
     private void gerenciarPartida() {
+        if(controller.campeonatoFinalizado()){
+            System.out.println("Campeonato finalizado, você não pode gerenciar partidas \n\n" );
+            iniciar();
+        }
         List<Match> matches = controller.getMatches();
         for (int i = 0; i < matches.size(); i++) {
             Match match = matches.get(i);
@@ -155,4 +174,20 @@ public class UserInterface {
     private void exibirResultadosFinais() {
         controller.exibirResultadosFinais();
     }
+
+    //leitor de arquivo que adiciona os times no campeonato
+    public void leitorTXT() throws NumberFormatException, Exception{
+        Path path = Paths.get("ballitgame/teste.txt");
+
+        try {
+            List<String> linhas = Files.readAllLines(path);
+            for (String linha : linhas) {
+                String[] partes = linha.split(";");
+                controller.cadastrarTime(partes[0], partes[1], Integer.parseInt(partes[2]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
