@@ -9,8 +9,13 @@ import java.util.TimerTask;
         private boolean finalizada;
     
         public Match(Team teamA, Team teamB) {
+            if(teamA == null || teamB == null){
+                throw new NullPointerException("Os times não podem ser nulos.");
+            }
+            if(teamA.getNome().equals(teamB.getNome())){
+                throw new IllegalArgumentException("Os times não podem ser iguais.");
+            }
             this.teamA = teamA;
-            
             this.teamB = teamB;
             this.finalizada = false;
         }
@@ -69,6 +74,9 @@ import java.util.TimerTask;
         }
 
         public void exibirResultados(){
+            if (!finalizada) {
+                throw new IllegalStateException("A partida ainda não foi finalizada.");
+            }
             System.out.println("Resultado da partida: ");
             System.out.println(teamA.getNome() + " " + teamA.getPontos() + " x " + teamB.getPontos() + " " + teamB.getNome());
         }

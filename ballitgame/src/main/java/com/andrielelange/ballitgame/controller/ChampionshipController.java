@@ -50,7 +50,7 @@ public class ChampionshipController {
 
     public void toStringControl(){
         for (Map.Entry<Integer, Championship> entry : championshipControl.entrySet()) {
-            System.out.println("Fase " + 1+entry.getKey() + "\n " );
+            System.out.println("Fase " + entry.getKey() + "\n " );
             entry.getValue().exibirResultadosFinais();
         }
     }

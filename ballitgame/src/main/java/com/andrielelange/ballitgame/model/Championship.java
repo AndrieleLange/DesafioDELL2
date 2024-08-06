@@ -3,12 +3,9 @@ package com.andrielelange.ballitgame.model;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Random;
 
 public class Championship {
     private Map<Team, Boolean> teams;
@@ -30,7 +27,6 @@ public class Championship {
         if (teams.size() >= 16) {
             throw new Exception("Número máximo de times atingido.");
         }
-        //se um time já foi cadastrado com esse nome, não pode cadastrar outro
         for (Map.Entry<Team, Boolean> entry : teams.entrySet()) {
             if (entry.getKey().getNome().toLowerCase().equals(team.getNome().toLowerCase())) {
                 throw new Exception("Time já cadastrado.");
@@ -78,10 +74,12 @@ public class Championship {
     }
 
     public void avancarFase() {
+        if(!teams.isEmpty()){
         registrarPerdedores();
         fase++;
         sortearTimes();
     }
+}
 
     public boolean faseFinalizada() {
         for (Match match : matches) {
@@ -119,7 +117,7 @@ public class Championship {
         for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
                 teams.add(entry.getKey());
         }
-        teams.sort((Team t1, Team t2) -> Integer.compare(t2.getPontos(), t1.getPontos()));
+        teams.sort((team1, team2) -> team2.getPontos() - team1.getPontos());
         System.out.println("Resultados Finais:");
         for (Team team : teams) {
             System.out.println("Time: " + team.getNome() + 
@@ -128,6 +126,7 @@ public class Championship {
                                ", Advrunghs: " + team.getAdvrunghs() + 
                                ", Pontos: " + team.getPontos());
         }
+        System.out.println("Campeão: " + getCampeao().getNome());
         System.out.println("Grito de Guerra do Campeão: " + getCampeao().getGritoDeGuerra());
     }
 }
