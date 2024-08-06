@@ -86,23 +86,13 @@ import java.util.TimerTask;
                 return teamA;
             } else if(teamB.getPontos() < teamA.getPontos()){
                 return teamB;
-            } else {
-                System.out.println("Empate! Grusht decidirá o perdedor.");
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask(){
-                    @Override
-                    public void run() {
-                        System.out.println("Grusht decidindo...");
-                    }
-                }, 1000);
-
+            }
                 try {
                     Thread.sleep(1100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 return grusht();
-            }
         }
     
         public Team getVencedor() {

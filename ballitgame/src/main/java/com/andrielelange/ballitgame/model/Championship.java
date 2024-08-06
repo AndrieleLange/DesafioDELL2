@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class Championship {
     private Map<Team, Boolean> teams;
     //private List<Team> teams;
+    private Team campeao;
     private List<Match> matches;
     private int fase;
 
@@ -60,7 +61,13 @@ public class Championship {
         return matches;
     }
 
-    public Map<Team,Boolean> getTeams() {
+    public List<Team> getTeams() {
+        List<Team> teams = new ArrayList<>();
+        for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
+            if (entry.getValue()) {
+                teams.add(entry.getKey());
+            }
+        }
         return teams;
     }
 
@@ -90,8 +97,19 @@ public class Championship {
         return true;
     }
 
+
+    // Se houver apenas um time ativo, o campeonato foi finalizado
     public boolean campeonatoFinalizado() {
-        return teams.size() == 1;
+        int timesAtivos = 0;
+        for (Map.Entry<Team, Boolean> entry : teams.entrySet()) {
+            if (entry.getValue()) {
+                timesAtivos++;
+            }
+        }
+        if(timesAtivos == 1){
+            campeao = getCampeao();
+        }
+        return timesAtivos == 1;
     }
 
     public Team getPerdedor(){
@@ -110,14 +128,13 @@ public class Championship {
     }
 
 
-
-
     public void exibirResultadosFinais() {
         List<Team> teams = new ArrayList<>();
         for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
                 teams.add(entry.getKey());
         }
-        teams.sort((team1, team2) -> team2.getPontos() - team1.getPontos());
+        Collections.sort(teams, (team1, team2) -> team2.getPontos() + team1.getPontos());
+
         System.out.println("Resultados Finais:");
         for (Team team : teams) {
             System.out.println("Time: " + team.getNome() + 
@@ -126,7 +143,7 @@ public class Championship {
                                ", Advrunghs: " + team.getAdvrunghs() + 
                                ", Pontos: " + team.getPontos());
         }
-        System.out.println("Campeão: " + getCampeao().getNome());
+        System.out.println("Campeão: " + campeao.getNome());
         System.out.println("Grito de Guerra do Campeão: " + getCampeao().getGritoDeGuerra());
     }
 }

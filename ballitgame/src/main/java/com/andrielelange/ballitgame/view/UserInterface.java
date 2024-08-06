@@ -173,7 +173,6 @@ public class UserInterface {
 
     private void exibirResultadosFinais() {
         controller.exibirResultadosFinais();
-        iniciar();
     }
 
     //leitor de arquivo que adiciona os times no campeonato
