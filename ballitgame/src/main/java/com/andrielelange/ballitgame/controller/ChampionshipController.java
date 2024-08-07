@@ -55,18 +55,9 @@ public class ChampionshipController {
                 System.out.println(team.getNome());
             }
         }
-
-        // for (Map.Entry<Integer, Lis> entry : championshipControl.entrySet()) {
-        //     System.out.println("Fase " + entry.getKey() + "\n " );
-        //     entry.getValue().exibirResultadosFinais();
-        // }
     }
 
     public void exibirResultadosFinais() {
         championship.exibirResultadosFinais();
-        // championshipControl.forEach((key, championship) -> {
-        //     System.out.println("Fase " + key+1);
-        //     championshipControl.get(key).exibirResultadosFinais();
-        // });
     }
 }

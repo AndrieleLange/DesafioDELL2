@@ -38,7 +38,7 @@ public class Championship {
 
     public void iniciarCampeonato() throws Exception {
         if (teams.size() < 8 || teams.size() % 2 != 0) {
-            throw new Exception("O número de times deve ser par e entre 8 e 16.");
+            throw new Exception("O número de times deve ser par e entre 8 e 16.\n Número de times cadastrados: " + teams.size() + "\n\n"); 
         }
         sortearTimes();
     }
@@ -53,8 +53,13 @@ public class Championship {
         Collections.shuffle(teams, new Random());
         matches.clear();
         for (int i = 0; i < teams.size(); i += 2) {
+            if(teams.size() % 2 != 0){
+                if (i == teams.size() - 1){
+                    matches.add(new Match(teams.get(i), null));
+                }
+            }
             matches.add(new Match(teams.get(i), teams.get(i + 1)));
-        }
+        }  
     }
 
     public List<Match> getMatches() {
@@ -81,6 +86,17 @@ public class Championship {
     }
 
     public void avancarFase() {
+        if(matches.isEmpty()){
+            throw new IllegalStateException("Nenhuma partida para avançar de fase.");
+        }
+        registrarPerdedores();
+        fase++;
+
+        if (campeonatoFinalizado()) {
+            System.out.println("Campeonato finalizado! Campeão: " + getCampeao().getNome());
+        } else {
+            sortearTimes();
+        }
         if(!teams.isEmpty()){
         registrarPerdedores();
         fase++;
@@ -127,13 +143,19 @@ public class Championship {
         return null;
     }
 
+    public void exibirResultados() {
+        for (Match match : matches) {
+            match.exibirResultados();
+        }
+    }   
+
 
     public void exibirResultadosFinais() {
         List<Team> teams = new ArrayList<>();
         for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
                 teams.add(entry.getKey());
         }
-        Collections.sort(teams, (team1, team2) -> team2.getPontos() + team1.getPontos());
+        Collections.sort(teams, (team1, team2) -> team2.getPontos() - team1.getPontos());
 
         System.out.println("Resultados Finais:");
         for (Team team : teams) {
@@ -144,7 +166,8 @@ public class Championship {
                                ", Pontos: " + team.getPontos());
         }
         System.out.println("Campeão: " + campeao.getNome());
-        System.out.println("Grito de Guerra do Campeão: " + getCampeao().getGritoDeGuerra());
+        System.out.println("Grito de Guerra do Campeão: " + campeao.getGritoDeGuerra());
+        System.out.println("");
     }
 }
 

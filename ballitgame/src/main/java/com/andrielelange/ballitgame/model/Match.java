@@ -7,13 +7,20 @@ import java.util.TimerTask;
         private Team teamA;
         private Team teamB;
         private boolean finalizada;
+        private boolean grushtDecidido = false;
+        private final Object lock = new Object();
     
         public Match(Team teamA, Team teamB) {
-            if(teamA == null || teamB == null){
+            if(teamA == null && teamB == null){
                 throw new NullPointerException("Os times não podem ser nulos.");
             }
             if(teamA.getNome().equals(teamB.getNome())){
                 throw new IllegalArgumentException("Os times não podem ser iguais.");
+            }
+            if(teamA == null ^ teamB == null){
+                this.teamA = teamA;
+                this.teamB = teamB;
+                this.finalizada = true;
             }
             this.teamA = teamA;
             this.teamB = teamB;
@@ -60,17 +67,16 @@ import java.util.TimerTask;
             this.finalizada = true;
         }
 
-        public Team grusht(){
-            Random random = new Random();
-            int sorteio = random.nextInt(2);
-            if(sorteio == 0){
-                teamA.addGrusht();
-                return teamA;
-            } else {
-                teamB.addGrusht();
-                return teamB;
-            } 
 
+        public Team decideGrusht(){
+            Random random = new Random();
+                        if (random.nextInt(2) == 0) {
+                            teamA.addGrusht();
+                            return teamA;
+                        } else {
+                            teamB.addGrusht();
+                            return teamB;
+                        }
         }
 
         public void exibirResultados(){
@@ -81,18 +87,15 @@ import java.util.TimerTask;
             System.out.println(teamA.getNome() + " " + teamA.getPontos() + " x " + teamB.getPontos() + " " + teamB.getNome());
         }
 
+
+        // errado
         public Team getPerdedor(){
-            if(teamA.getPontos() < teamB.getPontos()){
+            if(teamA.getPontos() < teamB.getPontos() || teamB == null){
                 return teamA;
             } else if(teamB.getPontos() < teamA.getPontos()){
                 return teamB;
             }
-                try {
-                    Thread.sleep(1100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return grusht();
+            return null;        
         }
     
         public Team getVencedor() {
@@ -102,20 +105,8 @@ import java.util.TimerTask;
                 return teamB;
             } else {
                 System.out.println("Empate! Grusht decidirá o vencedor.");
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask(){
-                    @Override
-                    public void run() {
-                        System.out.println("Grusht decidindo...");
-                    }
-                }, 1000);
-
-                try {
-                    Thread.sleep(1100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return grusht();
+                Team vencedor = decideGrusht();
+                return vencedor;
             }
         }
     }

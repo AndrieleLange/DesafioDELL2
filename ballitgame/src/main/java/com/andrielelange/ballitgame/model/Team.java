@@ -15,14 +15,11 @@ public class Team {
 
     public Team(String nome, String gritoDeGuerra, int anoFundacao) {
         data = LocalDate.now();
-        if(anoFundacao <= 0) {
-            throw new IllegalArgumentException("Ano de fundação não pode ser negativo");
+        if(anoFundacao <= 0 || anoFundacao > data.getYear()) {
+            throw new IllegalArgumentException("O time não pode ser cadastrado. Ano de fundação inválido.\n");
         }
-        if(anoFundacao > data.getYear()) {
-            throw new IllegalArgumentException("Ano de fundação não pode ser maior que o ano atual");
-        }
-        if(nome == null || gritoDeGuerra == null){
-            throw new IllegalArgumentException("O nome e o grito de guerra não podem ser nulos");
+        if(nome == null || gritoDeGuerra == null || nome == "" || gritoDeGuerra == "") {
+            throw new IllegalArgumentException("O time não pode ser cadastrado por o nome e o grito de guerra serem nulos.\n");
         }
         this.nome = nome;
         this.gritoDeGuerra = gritoDeGuerra;

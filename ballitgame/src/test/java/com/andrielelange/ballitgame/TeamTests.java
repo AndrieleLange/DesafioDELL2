@@ -7,7 +7,6 @@ import java.lang.IllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions;
 
-@SpringBootTest
 class TeamTests {
 
     @Test
@@ -15,6 +14,9 @@ class TeamTests {
         Exception exception;
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
             Team team1 = new Team(null, "AA", 1);});
+        
+        exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> { 
+            Team team1 = new Team("", "AA", 1);});
     }
 
     @Test
@@ -33,6 +35,9 @@ class TeamTests {
         Exception exception;
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
             Team team1 = new Team("null", null, 1);});
+
+        exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> { 
+            Team team1 = new Team("null", "", 1);});
     }
 
 

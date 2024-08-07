@@ -6,8 +6,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.andrielelange.ballitgame.controller.ChampionshipController;
 import com.andrielelange.ballitgame.model.Match;
+import com.andrielelange.ballitgame.model.Team;
 import com.andrielelange.ballitgame.*;
 
 
@@ -15,10 +19,39 @@ import com.andrielelange.ballitgame.*;
 public class UserInterface {
     private ChampionshipController controller;
     private Scanner scanner;
+    private Team vencedor;
 
     public UserInterface() {
         this.controller = new ChampionshipController();
         this.scanner = new Scanner(System.in);
+    }
+
+    public void telaInicial(){
+        System.out.println("Bem vindo ao BallitGame! \n\n");
+        System.out.println("O que deseja fazer? \n\n");
+        System.out.println("1. Cadastrar times");
+        System.out.println("2. Iniciar campeonato com times pré-cadastrados");
+        System.out.println("0. Sair");
+        int escolha = scanner.nextInt();
+        scanner.nextLine();  // Consumir nova linha
+        switch (escolha) {
+            case 2:
+                try {
+                    leitorTXT();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case 1:
+                cadastrarTime();
+                break;
+            case 0:
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Opção inválida!");
+                telaInicial();
+        }
     }
 
     public void iniciar() {
@@ -27,6 +60,7 @@ public class UserInterface {
             System.out.println("2. Iniciar Campeonato");
             System.out.println("3. Gerenciar Partida");
             System.out.println("4. Exibir Resultados Finais");
+            System.out.println("5. Voltar para tela inicial");
             System.out.println("0. Sair");
 
             int escolha = scanner.nextInt();
@@ -44,6 +78,9 @@ public class UserInterface {
                 case 4:
                     exibirResultadosFinais();
                     break;
+                case 5:
+                    telaInicial();
+                    break;
                 case 0:
                     System.exit(0);
                     break;
@@ -53,6 +90,8 @@ public class UserInterface {
             }
         }
     }
+
+ 
 
     private void cadastrarTime() {
         System.out.print("Nome do time: ");
@@ -65,23 +104,14 @@ public class UserInterface {
 
         try {
             controller.cadastrarTime(nome, gritoDeGuerra, anoFundacao);
-            System.out.println("Time cadastrado com sucesso!");
+            System.out.println("Time cadastrado com sucesso!\n");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        iniciar();
     }
 
     private void iniciarCampeonato() {
-        System.out.println("voçê deseja começar o campeonato com os times pré-cadastrados? (s/n)");
-        if(scanner.nextLine().equals("s")){
-            try {
-                leitorTXT();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }else{
-            iniciar();
-        }
         try {
         
             controller.iniciarCampeonato();
@@ -90,6 +120,7 @@ public class UserInterface {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        iniciar();
     }
 
     private void gerenciarPartida() {
@@ -149,11 +180,14 @@ public class UserInterface {
                     break;
                 case 7:
                     match.encerrarPartida();
-                    if(controller.campeonatoFinalizado()){
+                    if (match.getTeamB() != null && match.getTeamA().getPontos() == match.getTeamB().getPontos()) {
+                        waitForGrusht(match);
+                    }
+                    if (controller.campeonatoFinalizado()) {
                         System.out.println("Campeão: " + controller.getCampeao().getNome());
                         System.exit(0);
-                    }
-                    if(controller.faseFinalizada()){
+                    }   
+                    if (controller.faseFinalizada()) {
                         controller.avancarFase();
                     }
                     gerenciarPartida();
@@ -171,8 +205,31 @@ public class UserInterface {
         }
     }
 
+    private void waitForGrusht(Match match) {
+        System.out.println("Empate! Grusht decidirá o vencedor.");
+       Timer timer = new Timer();
+                timer.schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        System.out.println("Grusht decidindo...");
+                    }
+                }, 60000);
+
+                try {
+                    Thread.sleep(60100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                match.decideGrusht();
+                timer.cancel();
+
+        System.out.println("Vencedor: " + (match.getTeamA().getPontos() > match.getTeamB().getPontos() ? match.getTeamA().getNome() : match.getTeamB().getNome()));
+    }
+
     private void exibirResultadosFinais() {
         controller.exibirResultadosFinais();
+        System.out.println("Campeão: " + controller.getCampeao().getNome());
+        System.out.println("Grito de guerra: " + controller.getCampeao().getGritoDeGuerra());
     }
 
     //leitor de arquivo que adiciona os times no campeonato
@@ -188,6 +245,8 @@ public class UserInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        iniciarCampeonato();
+
     }
     
 }
