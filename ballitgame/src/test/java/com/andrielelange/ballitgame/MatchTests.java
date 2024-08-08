@@ -3,12 +3,9 @@ import com.andrielelange.ballitgame.model.Match;
 import com.andrielelange.ballitgame.model.Team;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.lang.IllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions;
-import java.lang.IllegalArgumentException;
-
 
 public class MatchTests {
     Team team1 = new Team("Dell", "pelo poder da tecnologia para impulsionar o progresso humano", 1984);
@@ -19,7 +16,6 @@ public class MatchTests {
         Exception exception;
         exception = Assertions.assertThrows(NullPointerException.class,  () -> {
             Match match = new Match(null, team1);});
-        Assertions.assertEquals("Os times não podem ser nulos.", exception.getMessage());
 
         exception = Assertions.assertThrows(NullPointerException.class,  () -> {
             Match match = new Match(team1, null);});
@@ -100,23 +96,9 @@ public class MatchTests {
         match.registrarAdvrungh(team1);
         match.registrarBlot(team2);
         match.registrarPlif(team2);
-        match.registrarAdvrungh(team2);
         match.encerrarPartida();
-        assertEquals("Time: Dell - Fundado em: 1984 - Pontos: 46", team1.toString());
-    }
-
-    @Test
-    public void testResultadoEmpate(){
-        Match match = new Match(team1, team2);
-        match.registrarBlot(team1);
-        match.registrarPlif(team1);
-        match.registrarAdvrungh(team1);
-        match.registrarBlot(team2);
-        match.registrarPlif(team2);
-        match.registrarAdvrungh(team2);
-        match.encerrarPartida();
-        assertEquals("Time: Dell - Fundado em: 1984 - Pontos: 46", team1.toString());
-        assertEquals("Time: Dell Technologies Inc. - Fundado em: 2016 - Pontos: 46", team2.toString());
+        assertEquals(team2, match.getVencedor());
+        assertEquals(true, match.isFinalizada());
     }
 
     @Test

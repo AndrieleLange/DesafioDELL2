@@ -2,7 +2,6 @@ package com.andrielelange.ballitgame;
 import com.andrielelange.ballitgame.model.Team;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.lang.IllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions;
