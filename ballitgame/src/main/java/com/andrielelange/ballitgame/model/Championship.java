@@ -143,11 +143,71 @@ public class Championship {
         return null;
     }
 
-    public void exibirResultados() {
-        for (Match match : matches) {
-            match.exibirResultados();
+    public void estatisticas(){
+        Team plifs;
+        Team blots;
+        Team advrunghs;
+        Team grushts;
+        
+        List<Team> teams = new ArrayList<>();
+        for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
+                teams.add(entry.getKey());
         }
-    }   
+
+        // ordenado pelo numero de pontos de forma decrescente 
+        Collections.sort(teams, (team1, team2) -> team2.getPontos() - team1.getPontos());
+
+            plifs = teams.get(0);
+            blots = teams.get(0);
+            advrunghs = teams.get(0);
+            grushts = teams.get(0);
+
+        for (Team team : teams) {
+         if(team == teams.get(0)){
+            continue;
+        }
+            if(team.getPlifs() > plifs.getPlifs()){
+                plifs = team;
+            }
+            if(team.getBlots() > blots.getBlots()){
+                blots = team;
+            }
+            if(team.getAdvrunghs() > advrunghs.getAdvrunghs()){
+                advrunghs = team;
+            }
+            if(team.getGrusht() > grushts.getGrusht()){
+                grushts = team;
+            }  
+        }
+        
+        System.out.println("Estatísticas:");
+        System.out.println("Time com mais Plifs: " + plifs.getNome() + " com " + plifs.getPlifs() + " Plifs.");
+        System.out.println("Time com mais Blots: " + blots.getNome() + " com " + blots.getBlots() + " Blots.");
+        System.out.println("Time com mais Advrunghs: " + advrunghs.getNome() + " com " + advrunghs.getAdvrunghs() + " Advrunghs.");
+        System.out.println("Time com mais Grushts: " + grushts.getNome() + " com " + grushts.getGrusht() + " Grushts.");
+
+    }
+
+
+    // //              vencedor
+    // // segundo |-----------------| terceiro
+    // // ---------                  ----------
+    // public void podio(){
+    //      // para conseguir ordenar pelo numero de pontos
+    //      List<Team> teams = new ArrayList<>();
+    //      for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
+    //              teams.add(entry.getKey());
+    //      }
+ 
+    //      // ordenado pelo numero de pontos de forma decrescente 
+    //      Collections.sort(teams, (team1, team2) -> team2.getPontos() - team1.getPontos());
+
+    //      System.out.println("                 " + teams.get(0).getNome());
+    //     System.out.println(teams.get(1).getNome()+" |-----------------| " + teams.get(2).getNome());
+    //     System.out.println("---------                  ----------");
+    // }
+
+
 
     // o que foi pedido na questão 5 do desafio
     public void exibirResultadosFinais() {

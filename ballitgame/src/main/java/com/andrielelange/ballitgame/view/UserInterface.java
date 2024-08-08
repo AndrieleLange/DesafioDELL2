@@ -60,7 +60,7 @@ public class UserInterface {
             System.out.println("3. Gerenciar Partida");
             System.out.println("4. Exibir Resultados Finais");
             System.out.println("5. Voltar para tela inicial");
-            System.out.println("6. Exibir times por fase");
+            System.out.println("6. Estatisticas do campeonato");
             System.out.println("0. Sair");
 
             int escolha = scanner.nextInt();
@@ -82,7 +82,7 @@ public class UserInterface {
                     telaInicial();
                     break;
                 case 6:
-                    controller.toStringControl();
+                    controller.getEstatisticas();
                     break;
                 case 0:
                     scanner.close();
@@ -240,8 +240,6 @@ public class UserInterface {
 
     private void exibirResultadosFinais() {
         controller.exibirResultadosFinais();
-        System.out.println("Campeão: " + controller.getCampeao().getNome());
-        System.out.println("Grito de guerra: " + controller.getCampeao().getGritoDeGuerra());
     }
 
     //leitor de arquivo que adiciona os times no campeonato

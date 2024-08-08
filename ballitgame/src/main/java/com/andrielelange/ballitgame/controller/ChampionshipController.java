@@ -30,6 +30,10 @@ public class ChampionshipController {
         return championship.getMatches();
     }
 
+    public void getEstatisticas() {
+        championship.estatisticas();
+    }
+
 
     public void avancarFase() {
         championship.avancarFase();
@@ -47,6 +51,7 @@ public class ChampionshipController {
     public Team getCampeao() {
         return championship.getCampeao();
     }
+
 
     public void toStringControl(){
         for(Map.Entry<Integer, List<Team>> entry : championshipControl.entrySet()) {
