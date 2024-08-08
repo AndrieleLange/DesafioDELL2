@@ -14,6 +14,7 @@ public class Championship {
     private Map<Team, Boolean> teams;
 
     private Team campeao;
+    private Map<Integer, List<Team>> championshipControl;
     private List<Match> matches; // partidas da fase atual
     private int fase;
 

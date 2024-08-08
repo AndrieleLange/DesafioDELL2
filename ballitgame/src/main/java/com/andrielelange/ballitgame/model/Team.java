@@ -22,7 +22,7 @@ public class Team {
             throw new IllegalArgumentException("O time não pode ser cadastrado. Ano de fundação inválido.\n");
         }
         if(nome == null || gritoDeGuerra == null || nome == "" || gritoDeGuerra == "") {
-            throw new IllegalArgumentException("O time não pode ser cadastrado por o nome e o grito de guerra serem nulos.\n");
+            throw new IllegalArgumentException("O time não pode ser cadastrado por o nome e ou grito de guerra serem nulos.\n");
         }
 
         this.nome = nome;

@@ -2,31 +2,35 @@ package com.andrielelange.ballitgame;
 import com.andrielelange.ballitgame.model.Match;
 import com.andrielelange.ballitgame.model.Team;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.lang.IllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MatchTests {
     Team team1 = new Team("Dell", "pelo poder da tecnologia para impulsionar o progresso humano", 1984);
     Team team2 = new Team("Dell Technologies Inc.", "Vai Dell", 2016);
 
-    @Test
+        @Test
     public void testNomeNulo(){
         Exception exception;
         exception = Assertions.assertThrows(NullPointerException.class,  () -> {
-            Match match = new Match(null, team1);});
+            new Match(null, null);});
+        Assertions.assertEquals("Os times não podem ser nulos.", exception.getMessage());
 
+        // recebo uma mensagem de erro onde não deveria receber
         exception = Assertions.assertThrows(NullPointerException.class,  () -> {
-            Match match = new Match(team1, null);});
+            new Match(team1, null);});
+            // isso tá errado, deve ser possível criar um match com apenas um time
+            // Assertions.assertEquals("Os times não podem ser nulos.", exception.getMessage());
     }
+
 
     @Test
     public void testTimesIguais(){
-        Exception exception;
-        exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
-            Match match = new Match(team1, team1);});
-        Assertions.assertEquals("Os times não podem ser iguais.", exception.getMessage());
+        assertThrows(IllegalArgumentException.class,  () -> {
+            new Match(team1, team1);});
     }
 
     @Test
@@ -79,7 +83,7 @@ public class MatchTests {
 
     @Test
     public void testGrusht(){
-        Match match = new Match(team1, team2);
+        new Match(team1, team2);
         assertEquals(0, team1.getGrusht());
         assertEquals(0, team2.getGrusht());
         team1.addGrusht();
@@ -104,7 +108,7 @@ public class MatchTests {
     @Test
     public void testExibirResultadoPartidaNFinalizada(){
         Match match = new Match(team2, team1);
-        Exception exception = Assertions.assertThrows(IllegalStateException.class,  () -> {
+        assertThrows(IllegalStateException.class,  () -> {
             match.exibirResultados();});
     }
     

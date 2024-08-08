@@ -3,8 +3,6 @@ import com.andrielelange.ballitgame.model.Team;
 import com.andrielelange.ballitgame.model.Championship;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import java.lang.IllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 ;
 
@@ -89,15 +87,4 @@ public class ChampionshipTests {
         championship.avancarFase();
         assertEquals(8, championship.getMatches().size());
     }
-
-    // testar vencedores
-    // testar avançar fase
-    // testar campeão
-    // testar finalizado
-    // testar empate
-    // testar finalizar partida
-    // testar finalizar campeonato
-    // testar lista em ordem de campeos
- 
-
 }

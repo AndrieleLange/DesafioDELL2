@@ -11,23 +11,20 @@ import java.util.TimerTask;
 
 import com.andrielelange.ballitgame.controller.ChampionshipController;
 import com.andrielelange.ballitgame.model.Match;
-import com.andrielelange.ballitgame.model.Team;
-import com.andrielelange.ballitgame.*;
-
-
 
 public class UserInterface {
     private ChampionshipController controller;
     private Scanner scanner;
-    private Team vencedor;
 
     public UserInterface() {
         this.controller = new ChampionshipController();
         this.scanner = new Scanner(System.in);
     }
 
+
+    // primeira tela do sistema
     public void telaInicial(){
-        System.out.println("Bem vindo ao BallitGame! \n\n");
+        System.out.println("\nBem vindo ao BallitGame! \n\n");
         System.out.println("O que deseja fazer? \n\n");
         System.out.println("1. Cadastrar times");
         System.out.println("2. Iniciar campeonato com times pré-cadastrados");
@@ -35,6 +32,9 @@ public class UserInterface {
         int escolha = scanner.nextInt();
         scanner.nextLine();  // Consumir nova linha
         switch (escolha) {
+            case 1:
+                cadastrarTime();
+                break;
             case 2:
                 try {
                     leitorTXT();
@@ -42,10 +42,8 @@ public class UserInterface {
                     System.out.println(e.getMessage());
                 }
                 break;
-            case 1:
-                cadastrarTime();
-                break;
             case 0:
+                scanner.close();
                 System.exit(0);
                 break;
             default:
@@ -54,6 +52,7 @@ public class UserInterface {
         }
     }
 
+    // a tela genérica que aparece quase sempre (e a mais importante ao meu ver)
     public void iniciar() {
         while (true) {
             System.out.println("1. Cadastrar Time");
@@ -61,6 +60,7 @@ public class UserInterface {
             System.out.println("3. Gerenciar Partida");
             System.out.println("4. Exibir Resultados Finais");
             System.out.println("5. Voltar para tela inicial");
+            System.out.println("6. Exibir times por fase");
             System.out.println("0. Sair");
 
             int escolha = scanner.nextInt();
@@ -81,7 +81,11 @@ public class UserInterface {
                 case 5:
                     telaInicial();
                     break;
+                case 6:
+                    controller.toStringControl();
+                    break;
                 case 0:
+                    scanner.close();
                     System.exit(0);
                     break;
                 default:
@@ -93,6 +97,7 @@ public class UserInterface {
 
  
 
+    // opção 1 do menu do método iniciar
     private void cadastrarTime() {
         System.out.print("Nome do time: ");
         String nome = scanner.nextLine();
@@ -111,6 +116,7 @@ public class UserInterface {
         iniciar();
     }
 
+    // opção 2 do menu do método iniciar
     private void iniciarCampeonato() {
         try {
         
@@ -123,6 +129,7 @@ public class UserInterface {
         iniciar();
     }
 
+    // opção 3 do menu do método iniciar e a lógica do gerenciamento de partidas
     private void gerenciarPartida() {
         if(controller.campeonatoFinalizado()){
             System.out.println("Campeonato finalizado, você não pode gerenciar partidas \n\n" );
@@ -205,13 +212,18 @@ public class UserInterface {
         }
     }
 
+
+    // ppara caso de empate, fazer com que o programa espere o 1 minuto da torcida para decidir quem ganhou
     private void waitForGrusht(Match match) {
         System.out.println("Empate! Grusht decidirá o vencedor.");
+        System.out.println("A torcida de " + match.getTeamA().getNome() + " grita: " + match.getTeamA().getGritoDeGuerra());
+        System.out.println("A torcida de " + match.getTeamB().getNome() + " grita: " + match.getTeamB().getGritoDeGuerra());
+        
        Timer timer = new Timer();
                 timer.schedule(new TimerTask(){
                     @Override
                     public void run() {
-                        System.out.println("Grusht decidindo...");
+                        System.out.println("Grusht decidido!");
                     }
                 }, 60000);
 
@@ -220,10 +232,10 @@ public class UserInterface {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                match.decideGrusht();
-                timer.cancel();
-
-        System.out.println("Vencedor: " + (match.getTeamA().getPontos() > match.getTeamB().getPontos() ? match.getTeamA().getNome() : match.getTeamB().getNome()));
+        match.decideGrusht();
+        timer.cancel(); // boa prática cancelar as coisas depois de usar
+                
+        System.out.println("Vencedor: " + (match.getVencedor().getNome()));
     }
 
     private void exibirResultadosFinais() {

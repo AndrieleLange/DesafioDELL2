@@ -4,39 +4,39 @@ import com.andrielelange.ballitgame.model.Team;
 import org.junit.jupiter.api.Test;
 import java.lang.IllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Assertions;
 
 class TeamTests {
 
     @Test
     public void testNome(){
-        Exception exception;
-        exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
-            Team team1 = new Team(null, "AA", 1);});
+        assertThrows(IllegalArgumentException.class,  () -> {
+            new Team(null, "AA", 1);});
         
-        exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> { 
-            Team team1 = new Team("", "AA", 1);});
+        assertThrows(IllegalArgumentException.class,  () -> { 
+            new Team("", "AA", 1);});
     }
 
     @Test
     public void testAno(){
         Exception exception;
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
-            Team team1 = new Team("Andri", "AA", -10);});
+            new Team("Andri", "AA", -10);});
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
-            Team team1 = new Team("Andri", "AA", 0);});
+            new Team("Andri", "AA", 0);});
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
-            Team team1 = new Team("Andri", "AA", 2025);});
+            new Team("Andri", "AA", 2025);});
     }
 
     @Test
     public void testGrito(){
         Exception exception;
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> {
-            Team team1 = new Team("null", null, 1);});
+            new Team("null", null, 1);});
 
         exception = Assertions.assertThrows(IllegalArgumentException.class,  () -> { 
-            Team team1 = new Team("null", "", 1);});
+            new Team("null", "", 1);});
     }
 
 

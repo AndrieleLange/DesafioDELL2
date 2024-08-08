@@ -50,10 +50,11 @@ public class ChampionshipController {
 
     public void toStringControl(){
         for(Map.Entry<Integer, List<Team>> entry : championshipControl.entrySet()) {
-            System.out.println("Fase " + entry.getKey() + "\n " );
+            System.out.println("Fase " + entry.getKey() );
             for (Team team : entry.getValue()) {
                 System.out.println(team.getNome());
             }
+            System.out.println("\n");
         }
     }
 

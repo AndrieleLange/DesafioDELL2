@@ -17,13 +17,15 @@ import java.util.Random;
             if(teamA.getNome().equals(teamB.getNome())){
                 throw new IllegalArgumentException("Os times não podem ser iguais.");
             }
-            if(teamA == null ^ teamB == null){ // XOR para a tentativa de continuar o compeonato mesmo com times impares após a primeira rodada
+            if(teamA != null && teamB == null){
                 this.teamA = teamA;
                 this.finalizada = true;
+            }else {
+                this.teamA = teamA;
+                this.teamB = teamB;
+                this.finalizada = false;
             }
-            this.teamA = teamA;
-            this.teamB = teamB;
-            this.finalizada = false;
+            
         }
     
         // getters
@@ -32,6 +34,9 @@ import java.util.Random;
         }
     
         public Team getTeamB() {
+            if(teamB == null){
+                return null;
+            }
             return teamB;
         }
     
@@ -100,6 +105,9 @@ import java.util.Random;
         }
     
         public Team getVencedor() {
+            if(teamB == null){
+                return teamA;
+            }
             if (teamA.getPontos() > teamB.getPontos()) {
                 return teamA;
             } else if (teamB.getPontos() > teamA.getPontos()) {
