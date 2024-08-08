@@ -8,10 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Championship {
+    // se for falso, o time foi eliminado
+    // se for verdadeiro, o time ainda está no campeonato
+    // foi criado para não ter que remover times da lista
     private Map<Team, Boolean> teams;
-    //private List<Team> teams;
+
     private Team campeao;
-    private List<Match> matches;
+    private List<Match> matches; // partidas da fase atual
     private int fase;
 
     public Championship() {
@@ -28,13 +31,19 @@ public class Championship {
         if (teams.size() >= 16) {
             throw new Exception("Número máximo de times atingido.");
         }
+        // verificando se já não existe um time com o mesmo nome
         for (Map.Entry<Team, Boolean> entry : teams.entrySet()) {
             if (entry.getKey().getNome().toLowerCase().equals(team.getNome().toLowerCase())) {
                 throw new Exception("Time já cadastrado.");
             }
+            if(entry.getKey().getGritoDeGuerra().toLowerCase().equals(team.getGritoDeGuerra().toLowerCase())){
+                throw new Exception("Grito de guerra já cadastrado.");
+            }
         } 
+        // se tudo estiver certo, o time é adicionado no map 
         teams.put(team, true);
     }
+
 
     public void iniciarCampeonato() throws Exception {
         if (teams.size() < 8 || teams.size() % 2 != 0) {
@@ -44,18 +53,22 @@ public class Championship {
     }
 
     private void sortearTimes() {
+        // lista para sortear os times e com apenas os times que poderão jogar
         List<Team> teams = new ArrayList<>();
+        // iterando sobre o map para utilizar apenas os times que podem jogar (igual a true)
         for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
             if (entry.getValue()) {
                 teams.add(entry.getKey());
             }
         }
+        // fazendo um random na lista para sortear os times antes de criar as partidas
         Collections.shuffle(teams, new Random());
+        //limpando a lista de partidas (caso tenha ocorrido uma anterior a esta)
         matches.clear();
         for (int i = 0; i < teams.size(); i += 2) {
             if(teams.size() % 2 != 0){
                 if (i == teams.size() - 1){
-                    matches.add(new Match(teams.get(i), null));
+                    matches.add(new Match(teams.get(i), null)); // a tentativa de continuar o campeonato com times impares
                 }
             }
             matches.add(new Match(teams.get(i), teams.get(i + 1)));
@@ -76,6 +89,7 @@ public class Championship {
         return teams;
     }
 
+    // mudar o estado do time para falso (eliminado)
     public void registrarPerdedores(){
         for (Match match : matches) {
             if(match.isFinalizada()){
@@ -86,23 +100,15 @@ public class Championship {
     }
 
     public void avancarFase() {
-        if(matches.isEmpty()){
-            throw new IllegalStateException("Nenhuma partida para avançar de fase.");
-        }
         registrarPerdedores();
-        fase++;
-
         if (campeonatoFinalizado()) {
-            System.out.println("Campeonato finalizado! Campeão: " + getCampeao().getNome());
+            System.out.println("Campeonato finalizado! Campeão: " + campeao.getNome());
         } else {
             sortearTimes();
+            fase++;
         }
-        if(!teams.isEmpty()){
-        registrarPerdedores();
-        fase++;
-        sortearTimes();
+        
     }
-}
 
     public boolean faseFinalizada() {
         for (Match match : matches) {
@@ -128,14 +134,7 @@ public class Championship {
         return timesAtivos == 1;
     }
 
-    public Team getPerdedor(){
-        if(faseFinalizada()){
-            return matches.get(0).getPerdedor();
-        }
-        return null;
-
-    }
-
+    // para quando o campeonato for finalizado, consiga pegar que foi o campeão
     public Team getCampeao() {
         if(faseFinalizada()) {
             return matches.get(0).getVencedor();
@@ -149,12 +148,15 @@ public class Championship {
         }
     }   
 
-
+    // o que foi pedido na questão 5 do desafio
     public void exibirResultadosFinais() {
+        // para conseguir ordenar pelo numero de pontos
         List<Team> teams = new ArrayList<>();
         for (Map.Entry<Team, Boolean> entry : this.teams.entrySet()) {
                 teams.add(entry.getKey());
         }
+
+        // ordenado pelo numero de pontos de forma decrescente 
         Collections.sort(teams, (team1, team2) -> team2.getPontos() - team1.getPontos());
 
         System.out.println("Resultados Finais:");

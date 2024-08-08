@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class ChampionshipController {
+    // resgistrar os times por fases do campeonato para a feature extra
     private Map<Integer, List<Team>> championshipControl;
     private Championship championship;
 

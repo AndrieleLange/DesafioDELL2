@@ -1,25 +1,24 @@
 package com.andrielelange.ballitgame.model;
 
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+
     public class Match {
+        // informações sobre os times que estão jogando
         private Team teamA;
         private Team teamB;
         private boolean finalizada;
-        private boolean grushtDecidido = false;
-        private final Object lock = new Object();
+
     
         public Match(Team teamA, Team teamB) {
+            // validações
             if(teamA == null && teamB == null){
                 throw new NullPointerException("Os times não podem ser nulos.");
             }
             if(teamA.getNome().equals(teamB.getNome())){
                 throw new IllegalArgumentException("Os times não podem ser iguais.");
             }
-            if(teamA == null ^ teamB == null){
+            if(teamA == null ^ teamB == null){ // XOR para a tentativa de continuar o compeonato mesmo com times impares após a primeira rodada
                 this.teamA = teamA;
-                this.teamB = teamB;
                 this.finalizada = true;
             }
             this.teamA = teamA;
@@ -27,6 +26,7 @@ import java.util.TimerTask;
             this.finalizada = false;
         }
     
+        // getters
         public Team getTeamA() {
             return teamA;
         }
@@ -39,6 +39,7 @@ import java.util.TimerTask;
             return finalizada;
         }
     
+        // "setters"
         public void registrarBlot(Team team) {
             if(team.equals(teamA)) {
                 teamA.addBlot();
@@ -63,11 +64,13 @@ import java.util.TimerTask;
             }
         }
     
+        // se a partida estiver encerrada, não pode mais administrar essa partida
         public void encerrarPartida() {
             this.finalizada = true;
         }
 
 
+        // decisão em caso de empate
         public Team decideGrusht(){
             Random random = new Random();
                         if (random.nextInt(2) == 0) {
@@ -87,8 +90,6 @@ import java.util.TimerTask;
             System.out.println(teamA.getNome() + " " + teamA.getPontos() + " x " + teamB.getPontos() + " " + teamB.getNome());
         }
 
-
-        // errado
         public Team getPerdedor(){
             if(teamA.getPontos() < teamB.getPontos() || teamB == null){
                 return teamA;
